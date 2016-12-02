@@ -3,7 +3,7 @@ export const ERROR_MSG = 'a runtime error occured! Use Inferno in development en
 
 export const isBrowser = typeof window !== 'undefined' && window.document;
 
-export function toArray(children) {
+export function toArray(children: any) {
 	return isArray(children) ? children : (children ? [children] : children);
 }
 
@@ -11,51 +11,51 @@ export function toArray(children) {
 // in Node 7 and the later versions of V8, slower in older versions though
 export const isArray = Array.isArray;
 
-export function isStatefulComponent(o) {
+export function isStatefulComponent(o: any) {
 	return !isUndefined(o.prototype) && !isUndefined(o.prototype.render);
 }
 
-export function isStringOrNumber(obj) {
+export function isStringOrNumber(obj: any) {
 	return isString(obj) || isNumber(obj);
 }
 
-export function isNullOrUndef(obj) {
+export function isNullOrUndef(obj: any) {
 	return isUndefined(obj) || isNull(obj);
 }
 
-export function isInvalid(obj) {
+export function isInvalid(obj: any) {
 	return isNull(obj) || obj === false || isTrue(obj) || isUndefined(obj);
 }
 
-export function isFunction(obj) {
+export function isFunction(obj: any) {
 	return typeof obj === 'function';
 }
 
-export function isAttrAnEvent(attr) {
+export function isAttrAnEvent(attr: string) {
 	return attr[0] === 'o' && attr[1] === 'n' && attr.length > 3;
 }
 
-export function isString(obj) {
+export function isString(obj: any) {
 	return typeof obj === 'string';
 }
 
-export function isNumber(obj) {
+export function isNumber(obj: any) {
 	return typeof obj === 'number';
 }
 
-export function isNull(obj) {
+export function isNull(obj: any) {
 	return obj === null;
 }
 
-export function isTrue(obj) {
+export function isTrue(obj: any) {
 	return obj === true;
 }
 
-export function isUndefined(obj) {
+export function isUndefined(obj: any) {
 	return obj === undefined;
 }
 
-export function isObject(o) {
+export function isObject(o: any) {
 	return typeof o === 'object';
 }
 
@@ -66,7 +66,7 @@ export function throwError(message?: string) {
 	throw new Error(`Inferno Error: ${ message }`);
 }
 
-export function warning(condition, message: string) {
+export function warning(condition: boolean, message: string) {
 	if (!condition) {
 		console.error(message);
 	}

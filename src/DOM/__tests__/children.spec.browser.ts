@@ -4,7 +4,7 @@ import { expect } from 'chai';
 
 describe('Children - (non-JSX)', () => {
 
-	let container;
+	let container: HTMLElement;
 
 	beforeEach(function() {
 		container = document.createElement('div');
@@ -253,7 +253,7 @@ describe('Children - (non-JSX)', () => {
 		[{
 			description: 'should set dynamic children as ' + arg.name,
 
-			template: (child?) => createElement('div', null, child)
+			template: (child?: any) => createElement('div', null, child)
 		}].forEach((test) => {
 
 			it(test.description, () => {
@@ -332,7 +332,7 @@ describe('Children - (non-JSX)', () => {
 
 		[{
 			description: 'should set deep dynamic children as ' + arg.name,
-			template: (child?) => createElement('div', null, createElement('b', null, child))
+			template: (child?: any) => createElement('div', null, createElement('b', null, child))
 		}].forEach((test) => {
 
 			it(test.description, () => {

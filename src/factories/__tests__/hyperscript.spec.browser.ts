@@ -3,7 +3,7 @@ import { render } from '../../DOM/rendering';
 import h from '../hyperscript';
 
 describe('HyperScript (non-JSX)', () => {
-	let container;
+	let container: HTMLElement;
 
 	beforeEach(() => {
 		container = document.createElement('div');

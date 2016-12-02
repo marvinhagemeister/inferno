@@ -5,7 +5,7 @@ import * as Inferno from '../../testUtils/inferno';
 Inferno; // suppress ts 'never used' error
 
 describe('cloneVNode (JSX)', () => {
-	let container;
+	let container: HTMLElement;
 
 	beforeEach(() => {
 		container = document.createElement('div');
@@ -74,7 +74,7 @@ describe('cloneVNode (JSX)', () => {
 
 		expect(node.key).to.equal('foo');
 		expect(node.ref).to.equal(ref);
-	});	
+	});
 
 	it('should clone a basic element with different children and props', () => {
 		const node1 = <div>Hello world</div>;

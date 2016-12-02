@@ -1,7 +1,13 @@
 import { isFunction, isNull, isUndefined } from '../shared';
+import { DevToolsStatus } from '../core/shapes';
 import { render, roots } from './rendering';
 
-export const devToolsStatus = {
+interface DevtoolsData {
+	type: string;
+	data: any;
+}
+
+export const devToolsStatus: DevToolsStatus = {
 	connected: false
 };
 
@@ -15,7 +21,7 @@ export function getIncrementalId() {
 	return internalIncrementer.id++;
 }
 
-function sendToDevTools(global, data) {
+function sendToDevTools(global: any, data: DevtoolsData) {
 	const event = new CustomEvent('inferno.client.message', {
 		detail: JSON.stringify(data, (key, val) => {
 			if (!isNull(val) && !isUndefined(val)) {
@@ -39,10 +45,10 @@ function rerenderRoots() {
 	}
 }
 
-export function initDevToolsHooks(global) {
+export function initDevToolsHooks(global: any) {
 	global.__INFERNO_DEVTOOLS_GLOBAL_HOOK__ = roots;
 
-	global.addEventListener('inferno.devtools.message', function (message) {
+	global.addEventListener('inferno.devtools.message', function (message: any) {
 		const detail = JSON.parse(message.detail);
 		const type = detail.type;
 
@@ -61,6 +67,6 @@ export function initDevToolsHooks(global) {
 	});
 }
 
-export function sendRoots(global) {
+export function sendRoots(global: any) {
 	sendToDevTools(global, { type: 'roots', data: roots });
 }

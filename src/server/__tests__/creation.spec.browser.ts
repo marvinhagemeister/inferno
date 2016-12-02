@@ -75,7 +75,7 @@ describe('SSR Creation (non-JSX)', () => {
 		result: '<div><span>test</span></div>'
 	}, {
 		description: 'should render a stateless component',
-		template: (value) => createElement('div', null, createElement(FunctionalComponent, { value })),
+		template: (value: any) => createElement('div', null, createElement(FunctionalComponent, { value })),
 		result: '<div><span>stateless foo!</span></div>'
 	}, {
 		description: 'should render a div with styles',

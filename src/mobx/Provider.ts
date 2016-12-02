@@ -1,13 +1,15 @@
+import { IObject } from "../core/shapes";
 import Component from 'inferno-component';
 import { warning } from '../shared';
 
-const specialKeys = {
+const specialKeys: IObject = {
 	children: true,
 	key: true,
 	ref: true
 };
 
 export default class Provider extends Component<any, any> {
+	static defaultProps = {};
 	contextTypes: any = { mobxStores() {} };
 	childContextTypes: any = { mobxStores() {} };
 	private store: any;
@@ -22,7 +24,7 @@ export default class Provider extends Component<any, any> {
 	}
 
 	getChildContext () {
-		let stores = {};
+		let stores: IObject = {};
 		// inherit stores
 		let baseStores = this.context.mobxStores;
 

@@ -6,6 +6,8 @@ import Provider from '../Provider';
 import connect from '../connect';
 import inject from '../inject';
 
+/* tslint:disable max-classes-per-file */
+
 describe('MobX connect()', () => {
 
 	it('should throw if store is invalid', () => {

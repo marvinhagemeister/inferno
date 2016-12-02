@@ -1,8 +1,10 @@
+export type Listener = () => any;
+
 export default class Lifecycle {
-	public listeners: Function[] = [];
+	public listeners: Listener[] = [];
 	public fastUnmount = true;
 
-	addListener(callback) {
+	addListener(callback: () => any) {
 		this.listeners.push(callback);
 	}
 	trigger() {

@@ -1,3 +1,4 @@
+import { IProps } from "./../core/shapes";
 import {
 	escapeText,
 	toHyphenCase,
@@ -11,7 +12,7 @@ import {
 
 import { isUnitlessNumber } from '../DOM/constants';
 
-export function renderStyleToString(style): string {
+export function renderStyleToString(style: any): string {
 	if (isStringOrNumber(style)) {
 		return style;
 	} else {
@@ -29,7 +30,7 @@ export function renderStyleToString(style): string {
 	}
 }
 
-export function renderAttributes(props): string[] {
+export function renderAttributes(props: IProps): string[] {
 	const outputAttrs: string[] = [];
 	const propsKeys = (props && Object.keys(props)) || [];
 

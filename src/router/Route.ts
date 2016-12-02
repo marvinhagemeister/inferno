@@ -1,7 +1,7 @@
 import Component from 'inferno-component';
 import createElement from 'inferno-create-element';
 
-interface IRouteHook {
+export interface IRouteHook {
 	(props?: any, router?: any): void;
 }
 

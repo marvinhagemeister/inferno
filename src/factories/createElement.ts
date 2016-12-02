@@ -1,7 +1,8 @@
 import {
 	createVNode,
 	VNodeFlags,
-	VNode
+	VNode,
+	VNodeType,
 } from '../core/shapes';
 import {
 	isAttrAnEvent,
@@ -12,7 +13,17 @@ import {
 	isStatefulComponent
 } from './../shared';
 
-const componentHooks = {
+interface Hooks {
+	onComponentWillMount: true;
+	onComponentDidMount: true;
+	onComponentWillUnmount: true;
+	onComponentShouldUpdate: true;
+	onComponentWillUpdate: true;
+	onComponentDidUpdate: true;
+	[key: string]: boolean;
+}
+
+const componentHooks: Hooks = {
 	onComponentWillMount: true,
 	onComponentDidMount: true,
 	onComponentWillUnmount: true,
@@ -21,13 +32,13 @@ const componentHooks = {
 	onComponentDidUpdate: true
 };
 
-export default function createElement(name: string | Function, props?: any, ..._children): VNode {
+export default function createElement(name: VNodeType, props?: any, ..._children: any[]): VNode {
 	if (isInvalid(name) || isObject(name)) {
 		throw new Error('Inferno Error: createElement() name paramater cannot be undefined, null, false or true, It must be a string, class or function.');
 	}
 	let children: any = _children;
 	let vNode = createVNode(0);
-	let ref = null;
+	let ref: any = null;
 	let key = null;
 	let flags = 0;
 

@@ -5,7 +5,7 @@ import createElement from './../../factories/createElement';
 import createClass from './../../component/createClass';
 
 describe('SSR Root Creation Streams - (non-JSX)', () => {
-	let container;
+	let container: HTMLElement;
 
 	beforeEach(() => {
 		container = document.createElement('div') as HTMLElement;
@@ -18,7 +18,7 @@ describe('SSR Root Creation Streams - (non-JSX)', () => {
 	});
 
 	it('should throw with invalid children', () => {
-		const test = (value) => createElement('a', null, true);
+		const test = (value: any) => createElement('a', null, true as any);
 
 		return streamPromise(test('foo')).catch(err => {
 			expect(err.toString()).to.equal('Error: invalid component');
@@ -41,11 +41,11 @@ describe('SSR Root Creation Streams - (non-JSX)', () => {
 
 });
 
-function streamPromise(dom) {
+function streamPromise(dom: any) {
 	return new Promise(function (res, rej) {
 		streamAsStaticMarkup(dom)
 		.on('error', rej)
-		.pipe(concatStream(function (buffer) {
+		.pipe(concatStream(function (buffer: Buffer) {
 			res(buffer.toString('utf-8'));
 		}));
 	});

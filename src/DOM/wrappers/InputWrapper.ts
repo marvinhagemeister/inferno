@@ -2,6 +2,7 @@ import {
 	EMPTY_OBJ,
 	isNullOrUndef
 } from './../../shared';
+import { VNode } from '../../core/shapes';
 import { wrappers } from './processElement';
 
 function isCheckedType(type) {
@@ -84,8 +85,8 @@ export function processInput(vNode, dom) {
 	}
 }
 
-export function applyValue(vNode, dom) {
-	const props = vNode.props || EMPTY_OBJ;
+export function applyValue(vNode: VNode, dom) {
+	const props = (vNode.props || EMPTY_OBJ) as VNode;
 	const type = props.type;
 	const value = props.value;
 	const checked = props.checked;

@@ -88,7 +88,7 @@ function applyMixins(inst, mixins) {
 	}
 }
 
-export default function createClass<P, S>(obj: ComponentSpec<P, S>) {
+export default function createClass<P, S>(obj: ComponentSpec<P, S>): any {
 	class Cl extends Component<P, S> {
 		static displayName = obj.displayName || 'Component';
 		static propTypes = obj.propTypes;

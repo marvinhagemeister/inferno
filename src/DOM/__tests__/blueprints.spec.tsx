@@ -3,10 +3,13 @@ import { render } from './../rendering';
 import Component from './../../component/es2015';
 import { innerHTML } from '../../tools/utils';
 import * as Inferno from '../../testUtils/inferno';
+import { IProps } from '../../core/shapes';
 Inferno; // suppress ts 'never used' error
 
+/* tslint:disable max-classes-per-file */
+
 describe('Blueprints (JSX)', () => {
-	let container;
+	let container: HTMLElement;
 
 	beforeEach(() => {
 		container = document.createElement('div');
@@ -28,7 +31,7 @@ describe('Blueprints (JSX)', () => {
 		class Counter extends Component<any, any> {
 			props: any;
 
-			constructor(props) {
+			constructor(props: IProps) {
 				super(props);
 				this.state = {
 					bool: false
@@ -53,7 +56,7 @@ describe('Blueprints (JSX)', () => {
 		}
 
 		class Wrapper extends Component<any, any> {
-			constructor(props) {
+			constructor(props: IProps) {
 				super(props);
 			}
 
@@ -83,7 +86,7 @@ describe('Blueprints (JSX)', () => {
 		it('Second render (update)', (done) => {
 			render(<Wrapper/>, container);
 			const buttons = Array.prototype.slice.call(container.querySelectorAll('button'));
-			buttons.forEach(button => button.click());
+			buttons.forEach((button: HTMLElement) => button.click());
 
 			// requestAnimationFrame is needed here because
 			// setState fires after a requestAnimationFrame
@@ -104,7 +107,7 @@ describe('Blueprints (JSX)', () => {
 			class A extends Component<any, any> {
 				props: any;
 
-				constructor(props) {
+				constructor(props: IProps) {
 					super(props);
 
 					this.state = {
@@ -147,7 +150,7 @@ describe('Blueprints (JSX)', () => {
 				_first: any;
 				_second: any;
 
-				constructor(props) {
+				constructor(props: IProps) {
 					super(props);
 					this._first = null;
 					this._second = null;
@@ -177,7 +180,7 @@ describe('Blueprints (JSX)', () => {
 			class A extends Component<any, any> {
 				props: any;
 
-				constructor(props) {
+				constructor(props: IProps) {
 					super(props);
 				}
 

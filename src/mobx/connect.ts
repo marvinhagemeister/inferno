@@ -7,7 +7,7 @@ import { throwError } from '../shared';
 /**
  * Wraps a component and provides stores as props
  */
-function connect (arg1: any, arg2 = null): any {
+function connect (arg1: any, arg2: any = null): any {
 	if (typeof arg1 === 'string') {
 		throwError('Store names should be provided as array');
 	}
@@ -16,7 +16,7 @@ function connect (arg1: any, arg2 = null): any {
 		// component needs stores
 		if (!arg2) {
 			// invoked as decorator
-			return (componentClass) => connect(arg1, componentClass);
+			return (componentClass: any) => connect(arg1, componentClass);
 		} else {
 			// TODO: deprecate this invocation style
 			return inject.apply(null, arg1)(connect(arg2));

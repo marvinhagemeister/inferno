@@ -4,7 +4,10 @@ import { createStore } from 'redux';
 import Component from './../../component/es2015';
 import { render } from './../../DOM/rendering';
 import * as Inferno from '../../testUtils/inferno';
+import { Action, Dispatch } from '../shapes';
 Inferno; // suppress ts 'never used' error
+
+/* tslint:disable max-classes-per-file */
 
 class BasicComponent extends Component<any, any> {
 	props: any;
@@ -30,7 +33,7 @@ class BasicComponent1 extends Component<any, any> {
 }
 
 describe('connect', () => {
-	let container;
+	let container: HTMLElement;
 
 	beforeEach(() => {
 		container = document.createElement('div');
@@ -57,27 +60,27 @@ describe('connect', () => {
 		const store = createStore(() => {
 			return { test: 1 };
 		});
-		const mapStateToProps = state => state;
+		const mapStateToProps = (state: any) => state;
 		const ConnectedComponent = connect(mapStateToProps)(BasicComponent);
 		render(<ConnectedComponent store={store}/>, container);
 		expect(container.innerHTML).to.equal('<div>1</div>');
 	});
 
 	it('should have correct mapDispatchToProps', () => {
-		const store = createStore((state = { test: 1 }, action) => {
+		const store = createStore((state = { test: 1 }, action: Action) => {
 			if (action && action.type === 'TEST_ACTION') {
 				return { test: 2 };
 			}
 			return state;
 		});
-		const mapDispatchToProps = dispatch => {
+		const mapDispatchToProps = (dispatch: Dispatch) => {
 			return {
 				action: () => {
 					dispatch({ type: 'TEST_ACTION' });
 				}
 			};
 		};
-		const mapStateToProps = state => state;
+		const mapStateToProps = (state: any) => state;
 		const ConnectedComponent = connect(mapStateToProps, mapDispatchToProps)(BasicComponent1);
 		store.subscribe(() => {
 			render(<ConnectedComponent store={store}/>, container);
@@ -89,20 +92,20 @@ describe('connect', () => {
 	});
 
 	it('should have correct mapDispatchToProps', () => {
-		const store = createStore((state = { test: 1 }, action) => {
+		const store = createStore((state = { test: 1 }, action: Action) => {
 			if (action && action.type === 'TEST_ACTION') {
 				return { test: 2 };
 			}
 			return state;
 		});
-		const mapDispatchToProps = dispatch => {
+		const mapDispatchToProps = (dispatch: Dispatch) => {
 			return {
 				action: () => {
 					dispatch({ type: 'TEST_ACTION' });
 				}
 			};
 		};
-		const mapStateToProps = state => state;
+		const mapStateToProps = (state: any) => state;
 		const ConnectedComponent = connect(mapStateToProps, mapDispatchToProps)(BasicComponent1);
 		store.subscribe(() => {
 			render(<ConnectedComponent store={store}/>, container);
@@ -114,7 +117,7 @@ describe('connect', () => {
 	});
 
 	it('should have correct mapDispatchToProps using action creators map', () => {
-		const store = createStore((state = { test: 1 }, action) => {
+		const store = createStore((state = { test: 1 }, action: Action) => {
 			if (action && action.type === 'TEST_ACTION') {
 				return { test: 2 };
 			}
@@ -125,7 +128,7 @@ describe('connect', () => {
 				return { type: 'TEST_ACTION' };
 			}
 		};
-		const mapStateToProps = state => state;
+		const mapStateToProps = (state: any) => state;
 		const ConnectedComponent = connect(mapStateToProps, mapDispatchToProps)(BasicComponent1);
 		store.subscribe(() => {
 			render(<ConnectedComponent store={store}/>, container);

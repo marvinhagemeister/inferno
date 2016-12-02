@@ -94,7 +94,7 @@ describe('CreateElement (non-JSX)', () => {
 	it('Should handle node with hooks and key', (done) => {
 
 		const node = () => createElement('div', { key: 'key2' }, 'Hooks');
-		const app = createElement(node as Function, {
+		const app = createElement(node, {
 			key: 'key1',
 			onComponentDidMount(domNode) {
 				expect(app.key).to.equal('key1');
@@ -110,14 +110,14 @@ describe('CreateElement (non-JSX)', () => {
 	it('Should handle node with children but no props', () => {
 
 		const node = () => createElement('div', null, 'Hooks');
-		const app = createElement(node as Function, null, 'Hooks');
+		const app = createElement(node, null, 'Hooks');
 
 		render(app, container);
 		expect(container.innerHTML).to.equal('<div>Hooks</div>');
 	});
 
 	it('Should throw with invalid name', () => {
-		expect(() => createElement({} as Function)).to.throw(Error);
+		expect(() => createElement({} as any)).to.throw(Error);
 	});
 
 	it('Should handle node with refs', (done) => {
@@ -127,7 +127,7 @@ describe('CreateElement (non-JSX)', () => {
 			const node = () => createElement('a', {
 				ref: (c) => myRef = c
 			});
-			return createElement(node as Function, {
+			return createElement(node, {
 				onComponentDidMount() {
 					expect(myRef.tagName).to.equal('A');
 					done();

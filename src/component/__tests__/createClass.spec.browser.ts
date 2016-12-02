@@ -24,7 +24,7 @@ describe('Components createClass (non-JSX)', () => {
 	});
 
 	it('should render a basic component', () => {
-		render(createElement(BasicComponent as Function), container);
+		render(createElement(BasicComponent), container);
 		expect(container.innerHTML).to.equal('<div>Hello world!</div>');
 	});
 	it('should render a basic component with lifecycle', () => {
@@ -38,8 +38,8 @@ describe('Components createClass (non-JSX)', () => {
 			}
 		});
 
-		render(createElement(LifecycleComponent1 as Function, {}), container);
-		render(createElement(LifecycleComponent1 as Function, {}), container);
+		render(createElement(LifecycleComponent1, {}), container);
+		render(createElement(LifecycleComponent1, {}), container);
 		expect(componentWillUpdate).to.equal(true);
 	});
 	it('should render a basic component with methods bound', done => {
@@ -58,7 +58,7 @@ describe('Components createClass (non-JSX)', () => {
 			}
 		});
 
-		render(createElement(BoundComponent as Function), container);
+		render(createElement(BoundComponent), container);
 		setTimeout(() => {
 			expect(context === context2).to.equal(true);
 			done();

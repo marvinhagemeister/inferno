@@ -1,6 +1,9 @@
 import {
 	VNodeFlags,
 	createVoidVNode,
+	VNode,
+	IProps,
+	DevToolsStatus
 } from '../core/shapes';
 import {
 	isArray,
@@ -10,6 +13,7 @@ import {
 	throwError,
 } from './../shared';
 
+import Lifecycle from './lifecycle';
 import cloneVNode from '../factories/cloneVNode';
 import { componentToDOMNodeMap } from './rendering';
 import { mount } from './mounting';
@@ -27,7 +31,7 @@ export function copyPropsTo(copyFrom, copyTo) {
 	}
 }
 
-export function createStatefulComponentInstance(vNode, Component, props, context, isSVG, devToolsStatus) {
+export function createStatefulComponentInstance(vNode: VNode, Component, props: IProps, context, isSVG: boolean, devToolsStatus: DevToolsStatus) {
 	const instance = new Component(props, context);
 
 	instance.context = context;
@@ -72,25 +76,25 @@ export function createStatefulComponentInstance(vNode, Component, props, context
 	instance._lastInput = input;
 	return instance;
 }
-export function replaceLastChildAndUnmount(lastInput, nextInput, parentDom, lifecycle, context, isSVG, isRecycling) {
+export function replaceLastChildAndUnmount(lastInput, nextInput, parentDom: Element, lifecycle: Lifecycle, context, isSVG: boolean, isRecycling: boolean) {
 	replaceVNode(parentDom, mount(nextInput, null, lifecycle, context, isSVG), lastInput, lifecycle, isRecycling);
 }
 
-export function replaceVNode(parentDom, dom, vNode, lifecycle, isRecycling) {
+export function replaceVNode(parentDom, dom, vNode: VNode, lifecycle: Lifecycle, isRecycling: boolean) {
 	let shallowUnmount = false;
 	// we cannot cache nodeType here as vNode might be re-assigned below
 	if (vNode.flags & VNodeFlags.Component) {
 		// if we are accessing a stateful or stateless component, we want to access their last rendered input
 		// accessing their DOM node is not useful to us here
 		unmount(vNode, null, lifecycle, false, false, isRecycling);
-		vNode = vNode.children._lastInput || vNode.children;
+		vNode = (vNode.children as VNode)._lastInput || vNode.children;
 		shallowUnmount = true;
 	}
 	replaceChild(parentDom, dom, vNode.dom);
 	unmount(vNode, null, lifecycle, false, shallowUnmount, isRecycling);
 }
 
-export function createStatelessComponentInput(vNode, component, props, context) {
+export function createStatelessComponentInput(vNode: VNode, component, props: IProps, context) {
 	let input = component(props, context);
 
 	if (isArray(input)) {
@@ -115,7 +119,7 @@ export function createStatelessComponentInput(vNode, component, props, context) 
 	return input;
 }
 
-export function setTextContent(dom, text) {
+export function setTextContent(dom: Element, text: string) {
 	if (text !== '') {
 		dom.textContent = text;
 	} else {
@@ -123,15 +127,15 @@ export function setTextContent(dom, text) {
 	}
 }
 
-export function updateTextContent(dom, text) {
+export function updateTextContent(dom: Element, text: string) {
 	dom.firstChild.nodeValue = text;
 }
 
-export function appendChild(parentDom, dom) {
+export function appendChild(parentDom: Element, dom: Element | Text) {
 	parentDom.appendChild(dom);
 }
 
-export function insertOrAppend(parentDom, newNode, nextNode) {
+export function insertOrAppend(parentDom: Element, newNode, nextNode) {
 	if (isNullOrUndef(nextNode)) {
 		appendChild(parentDom, newNode);
 	} else {
@@ -139,7 +143,7 @@ export function insertOrAppend(parentDom, newNode, nextNode) {
 	}
 }
 
-export function documentCreateElement(tag, isSVG) {
+export function documentCreateElement(tag: string, isSVG: boolean) {
 	if (isSVG === true) {
 		return document.createElementNS(svgNS, tag);
 	} else {
@@ -147,7 +151,7 @@ export function documentCreateElement(tag, isSVG) {
 	}
 }
 
-export function replaceWithNewNode(lastNode, nextNode, parentDom, lifecycle, context, isSVG, isRecycling) {
+export function replaceWithNewNode(lastNode, nextNode, parentDom: Element, lifecycle: Lifecycle, context, isSVG: boolean, isRecycling: boolean) {
 	let lastInstance: any = null;
 	const instanceLastNode = lastNode._lastInput;
 
@@ -176,14 +180,14 @@ export function removeChild(parentDom, dom) {
 	parentDom.removeChild(dom);
 }
 
-export function removeAllChildren(dom, children, lifecycle, shallowUnmount, isRecycling) {
+export function removeAllChildren(dom, children, lifecycle: Lifecycle, shallowUnmount, isRecycling: boolean) {
 	dom.textContent = '';
 	if (!lifecycle.fastUnmount) {
 		removeChildren(null, children, lifecycle, shallowUnmount, isRecycling);
 	}
 }
 
-export function removeChildren(dom, children, lifecycle, shallowUnmount, isRecycling) {
+export function removeChildren(dom, children, lifecycle: Lifecycle, shallowUnmount, isRecycling: boolean) {
 	for (let i = 0; i < children.length; i++) {
 		const child = children[i];
 

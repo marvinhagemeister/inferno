@@ -3,10 +3,17 @@ import { assert, spy } from 'sinon';
 import { render } from './../rendering';
 import Component from './../../component/es2015';
 import * as Inferno from '../../testUtils/inferno';
+import { IProps } from '../../core/shapes';
 Inferno; // suppress ts 'never used' error
 
+/* tslint:disable max-classes-per-file */
+
+interface ITab {
+	title: string;
+}
+
 describe('Children - (JSX)', () => {
-	let container;
+	let container: HTMLElement;
 
 	beforeEach(function() {
 		container = document.createElement('div');
@@ -16,7 +23,7 @@ describe('Children - (JSX)', () => {
 		container.innerHTML = '';
 	});
 
-	describe('keyed - children', function() {
+	describe('keyed - children', function () {
 		beforeEach(() => {
 			container = document.createElement('div');
 			document.body.appendChild(container);
@@ -28,7 +35,7 @@ describe('Children - (JSX)', () => {
 		});
 
 		it('Should push to correct location when it keyed list has siblings', function() {
-			const _tabs = [{ title: "Item A" }, { title: "Item B" }];
+			const _tabs: ITab[] = [{ title: "Item A" }, { title: "Item B" }];
 
 			function Tab({ title, onSelect, key, id }) {
 				return (
@@ -48,7 +55,7 @@ describe('Children - (JSX)', () => {
 				}
 
 				return (
-					<div class="tab-group">{tabs.map((tab, i) => (
+					<div class="tab-group">{tabs.map((tab: ITab, i: number) => (
 						<Tab
 							key={ "Item " + i }
 							title={ tab.title }
@@ -66,22 +73,22 @@ describe('Children - (JSX)', () => {
 			renderIt();
 
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>Item A</div><div>Item B</div><div id="add">Add</div></div>');
-			let addTab = container.querySelector('#add');
+			let addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>Item A</div><div>Item B</div><div>New 2</div><div id="add">Add</div></div>');
-			addTab = container.querySelector('#add');
+			addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>Item A</div><div>Item B</div><div>New 2</div><div>New 3</div><div id="add">Add</div></div>');
-			addTab = container.querySelector('#add');
+			addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>Item A</div><div>Item B</div><div>New 2</div><div>New 3</div><div>New 4</div><div id="add">Add</div></div>');
-			addTab = container.querySelector('#add');
+			addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>Item A</div><div>Item B</div><div>New 2</div><div>New 3</div><div>New 4</div><div>New 5</div><div id="add">Add</div></div>');
 		});
 
 		it('Should append child node to correct location when its empty at the beginning ', function() {
-			const _tabs = [];
+			const _tabs: ITab[] = [];
 
 			function Tab({ title, onSelect, key, id }) {
 				return (
@@ -101,7 +108,7 @@ describe('Children - (JSX)', () => {
 				}
 
 				return (
-					<div class="tab-group">{tabs.map((tab, i) => (
+					<div class="tab-group">{tabs.map((tab: ITab, i: number) => (
 						<Tab
 							key={ "Item " + i }
 							title={ tab.title }
@@ -118,16 +125,16 @@ describe('Children - (JSX)', () => {
 
 			renderIt();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div id="add">Add</div></div>');
-			let addTab = container.querySelector('#add');
+			let addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>New 0</div><div id="add">Add</div></div>');
-			addTab = container.querySelector('#add');
+			addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>New 0</div><div>New 1</div><div id="add">Add</div></div>');
 		});
 
 		it('Should append child node to correct location when its empty at the beginning ', function() {
-			const _tabs = [];
+			const _tabs: ITab[] = [];
 
 			function Tab({ title, onSelect, key, id }) {
 				return (
@@ -148,7 +155,7 @@ describe('Children - (JSX)', () => {
 
 				return (
 					<div class="tab-group">
-						<Tab onSelect={create} id="add" title="Add"/>{tabs.map((tab, i) => (
+						<Tab onSelect={create} id="add" title="Add"/>{tabs.map((tab: ITab, i: number) => (
 						<Tab
 							key={ "Item " + i }
 							title={ tab.title }
@@ -164,16 +171,16 @@ describe('Children - (JSX)', () => {
 
 			renderIt();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div id="add">Add</div></div>');
-			let addTab = container.querySelector('#add');
+			let addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div id="add">Add</div><div>New 0</div></div>');
-			addTab = container.querySelector('#add');
+			addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div id="add">Add</div><div>New 0</div><div>New 1</div></div>');
 		});
 
 		it('Should append child node to correct location when its empty at the beginning ', function() {
-			const _tabs = [];
+			const _tabs: ITab[] = [];
 
 			function Tab({ title, onSelect, key, id }) {
 				return (
@@ -193,13 +200,13 @@ describe('Children - (JSX)', () => {
 				}
 
 				return (
-					<div class="tab-group">{tabs.map((tab, i) => (
+					<div class="tab-group">{tabs.map((tab: ITab, i: number) => (
 						<Tab
 							key={ "Item " + i }
 							title={ tab.title }
 							onSelect={ () => undefined }/>
 					))}
-						<Tab onSelect={create} id="add" title="Add"/>{tabs.map((tab, i) => (
+						<Tab onSelect={create} id="add" title="Add"/>{tabs.map((tab: ITab, i: number) => (
 							<Tab
 								key={ "Item " + i }
 								title={ tab.title }
@@ -216,16 +223,16 @@ describe('Children - (JSX)', () => {
 			renderIt();
 
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div id="add">Add</div></div>');
-			let addTab = container.querySelector('#add');
+			let addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>New 0</div><div id="add">Add</div><div>New 0</div></div>');
-			addTab = container.querySelector('#add');
+			addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>New 0</div><div>New 1</div><div id="add">Add</div><div>New 0</div><div>New 1</div></div>');
 		});
 
 		it('Should appendx3 to correct location when it keyed list has siblings', function() {
-			const _tabs = [{ title: "Item A" }, { title: "Item B" }];
+			const _tabs: ITab[] = [{ title: "Item A" }, { title: "Item B" }];
 
 			function Tab({ title, onSelect, key, id }) {
 				return (
@@ -247,7 +254,7 @@ describe('Children - (JSX)', () => {
 				}
 
 				return (
-					<div class="tab-group">{tabs.map((tab, i) => (
+					<div class="tab-group">{tabs.map((tab: ITab, i: number) => (
 						<Tab
 							key={ "Item " + i }
 							title={ tab.title }
@@ -265,13 +272,13 @@ describe('Children - (JSX)', () => {
 			renderIt();
 
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>Item A</div><div>Item B</div><div id="add">Add</div></div>');
-			const addTab = container.querySelector('#add');
+			const addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>Item A</div><div>Item B</div><div>New 2</div><div>New 3</div><div>New 4</div><div id="add">Add</div></div>');
 		});
 
 		it('Should unshiftx3 to correct location when it keyed list has siblings', function() {
-			const _tabs = [{ title: "Item A" }, { title: "Item B" }];
+			const _tabs: ITab[] = [{ title: "Item A" }, { title: "Item B" }];
 
 			function Tab({ title, onSelect, key, id }) {
 				return (
@@ -293,7 +300,7 @@ describe('Children - (JSX)', () => {
 				}
 
 				return (
-					<div class="tab-group">{tabs.map((tab, i) => (
+					<div class="tab-group">{tabs.map((tab: ITab, i: number) => (
 						<Tab
 							key={ "Item " + i }
 							title={ tab.title }
@@ -311,13 +318,13 @@ describe('Children - (JSX)', () => {
 			renderIt();
 
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>Item A</div><div>Item B</div><div id="add">Add</div></div>');
-			const addTab = container.querySelector('#add');
+			const addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>New 4</div><div>New 3</div><div>New 2</div><div>Item A</div><div>Item B</div><div id="add">Add</div></div>');
 		});
 
 		it('Inline text element before array list', function() {
-			const _tabs = [];
+			const _tabs: ITab[] = [];
 
 			function Tab({ title, key }) {
 				return (
@@ -329,7 +336,7 @@ describe('Children - (JSX)', () => {
 
 			function TabGroup({ tabs }) {
 				return (
-					<div class="tab-group">inlineText{tabs.map((tab, i) => (
+					<div class="tab-group">inlineText{tabs.map((tab: ITab, i: number) => (
 						<Tab
 							key={ "Item " + i }
 							title={ tab.title }/>
@@ -353,7 +360,7 @@ describe('Children - (JSX)', () => {
 		});
 
 		it('Inline text element after array list', function() {
-			const _tabs = [];
+			const _tabs: ITab[] = [];
 
 			function Tab({ title, key }) {
 				return (
@@ -365,7 +372,7 @@ describe('Children - (JSX)', () => {
 
 			function TabGroup({ tabs }) {
 				return (
-					<div class="tab-group">{tabs.map((tab, i) => (
+					<div class="tab-group">{tabs.map((tab: ITab, i: number) => (
 						<Tab
 							key={ "Item " + i }
 							title={ tab.title }/>
@@ -402,7 +409,7 @@ describe('Children - (JSX)', () => {
 		});
 
 		it('Should push to correct location when it keyed list has siblings', function() {
-			const _tabs = [{ title: "Item A" }, { title: "Item B" }];
+			const _tabs: ITab[] = [{ title: "Item A" }, { title: "Item B" }];
 
 			function Tab({ title, onSelect, id }) {
 				return (
@@ -421,7 +428,7 @@ describe('Children - (JSX)', () => {
 				}
 
 				return (
-					<div class="tab-group">{tabs.map((tab, i) => (
+					<div class="tab-group">{tabs.map((tab: ITab, i: number) => (
 						<Tab
 							title={ tab.title }
 							onSelect={ () => undefined }/>
@@ -438,22 +445,22 @@ describe('Children - (JSX)', () => {
 			renderIt();
 
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>Item A</div><div>Item B</div><div id="add">Add</div></div>');
-			let addTab = container.querySelector('#add');
+			let addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>Item A</div><div>Item B</div><div>New 2</div><div id="add">Add</div></div>');
-			addTab = container.querySelector('#add');
+			addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>Item A</div><div>Item B</div><div>New 2</div><div>New 3</div><div id="add">Add</div></div>');
-			addTab = container.querySelector('#add');
+			addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>Item A</div><div>Item B</div><div>New 2</div><div>New 3</div><div>New 4</div><div id="add">Add</div></div>');
-			addTab = container.querySelector('#add');
+			addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>Item A</div><div>Item B</div><div>New 2</div><div>New 3</div><div>New 4</div><div>New 5</div><div id="add">Add</div></div>');
 		});
 
 		it('Should append child node to correct location when its empty at the beginning ', function() {
-			const _tabs = [];
+			const _tabs: ITab[] = [];
 
 			function Tab({ title, onSelect, id }) {
 				return (
@@ -472,7 +479,7 @@ describe('Children - (JSX)', () => {
 				}
 
 				return (
-					<div class="tab-group">{tabs.map((tab, i) => (
+					<div class="tab-group">{tabs.map((tab: ITab, i: number) => (
 						<Tab
 							title={ tab.title }
 							onSelect={ () => undefined }/>
@@ -488,16 +495,16 @@ describe('Children - (JSX)', () => {
 
 			renderIt();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div id="add">Add</div></div>');
-			let addTab = container.querySelector('#add');
+			let addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>New 0</div><div id="add">Add</div></div>');
-			addTab = container.querySelector('#add');
+			addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>New 0</div><div>New 1</div><div id="add">Add</div></div>');
 		});
 
 		it('Should append child node to correct location when its empty at the beginning ', function() {
-			const _tabs = [];
+			const _tabs: ITab[] = [];
 
 			function Tab({ title, onSelect, id }) {
 				return (
@@ -517,7 +524,7 @@ describe('Children - (JSX)', () => {
 
 				return (
 					<div class="tab-group">
-						<Tab onSelect={create} id="add" title="Add"/>{tabs.map((tab, i) => (
+						<Tab onSelect={create} id="add" title="Add"/>{tabs.map((tab: ITab, i: number) => (
 						<Tab
 							title={ tab.title }
 							onSelect={ () => undefined }/>
@@ -533,7 +540,7 @@ describe('Children - (JSX)', () => {
 			renderIt();
 
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div id="add">Add</div></div>');
-			const addTab = container.querySelector('#add');
+			const addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div id="add">Add</div><div>New 0</div></div>');
 			addTab.click();
@@ -541,7 +548,7 @@ describe('Children - (JSX)', () => {
 		});
 
 		it('Should append child node to correct location when its empty at the beginning ', function() {
-			const _tabs = [];
+			const _tabs: ITab[] = [];
 
 			function Tab({ title, onSelect, id }) {
 				return (
@@ -560,12 +567,12 @@ describe('Children - (JSX)', () => {
 				}
 
 				return (
-					<div class="tab-group">{tabs.map((tab, i) => (
+					<div class="tab-group">{tabs.map((tab: ITab, i: number) => (
 						<Tab
 							title={ tab.title }
 							onSelect={ () => undefined }/>
 					))}
-						<Tab onSelect={create} id="add" title="Add"/>{tabs.map((tab, i) => (
+						<Tab onSelect={create} id="add" title="Add"/>{tabs.map((tab: ITab, i: number) => (
 							<Tab
 								title={ tab.title }
 								onSelect={ () => undefined }/>
@@ -581,16 +588,16 @@ describe('Children - (JSX)', () => {
 			renderIt();
 
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div id="add">Add</div></div>');
-			let addTab = container.querySelector('#add');
+			let addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>New 0</div><div id="add">Add</div><div>New 0</div></div>');
-			addTab = container.querySelector('#add');
+			addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>New 0</div><div>New 1</div><div id="add">Add</div><div>New 0</div><div>New 1</div></div>');
 		});
 
 		it('Should appendx3 to correct location when it list has siblings', function() {
-			const _tabs = [{ title: "Item A" }, { title: "Item B" }];
+			const _tabs: ITab[] = [{ title: "Item A" }, { title: "Item B" }];
 
 			function Tab({ title, onSelect, id }) {
 				return (
@@ -611,7 +618,7 @@ describe('Children - (JSX)', () => {
 				}
 
 				return (
-					<div class="tab-group">{tabs.map((tab, i) => (
+					<div class="tab-group">{tabs.map((tab: ITab, i: number) => (
 						<Tab
 							title={ tab.title }
 							onSelect={ () => undefined }/>
@@ -628,13 +635,13 @@ describe('Children - (JSX)', () => {
 			renderIt();
 
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>Item A</div><div>Item B</div><div id="add">Add</div></div>');
-			const addTab = container.querySelector('#add');
+			const addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>Item A</div><div>Item B</div><div>New 2</div><div>New 3</div><div>New 4</div><div id="add">Add</div></div>');
 		});
 
 		it('Should unshiftx3 to correct location when it list has siblings', function() {
-			const _tabs = [{ title: "Item A" }, { title: "Item B" }];
+			const _tabs: ITab[] = [{ title: "Item A" }, { title: "Item B" }];
 
 			function Tab({ title, onSelect, id }) {
 				return (
@@ -655,7 +662,7 @@ describe('Children - (JSX)', () => {
 				}
 
 				return (
-					<div class="tab-group">{tabs.map((tab, i) => (
+					<div class="tab-group">{tabs.map((tab: ITab, i: number) => (
 						<Tab
 							title={ tab.title }
 							onSelect={ () => undefined }/>
@@ -672,13 +679,13 @@ describe('Children - (JSX)', () => {
 			renderIt();
 
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>Item A</div><div>Item B</div><div id="add">Add</div></div>');
-			const addTab = container.querySelector('#add');
+			const addTab = container.querySelector('#add') as HTMLElement;
 			addTab.click();
 			expect(container.innerHTML).to.equal('<div class="tab-group"><div>New 4</div><div>New 3</div><div>New 2</div><div>Item A</div><div>Item B</div><div id="add">Add</div></div>');
 		});
 
 		it('Inline text element before array list', function() {
-			const _tabs = [];
+			const _tabs: ITab[] = [];
 
 			function Tab({ title }) {
 				return (
@@ -690,7 +697,7 @@ describe('Children - (JSX)', () => {
 
 			function TabGroup({ tabs }) {
 				return (
-					<div class="tab-group">inlineText{tabs.map((tab, i) => (
+					<div class="tab-group">inlineText{tabs.map((tab: ITab, i: number) => (
 						<Tab
 							title={ tab.title }/>
 					))}
@@ -713,7 +720,7 @@ describe('Children - (JSX)', () => {
 		});
 
 		it('Inline text element after array list', function() {
-			const _tabs = [];
+			const _tabs: ITab[] = [];
 
 			function Tab({ title }) {
 				return (
@@ -725,7 +732,7 @@ describe('Children - (JSX)', () => {
 
 			function TabGroup({ tabs }) {
 				return (
-					<div class="tab-group">{tabs.map((tab, i) => (
+					<div class="tab-group">{tabs.map((tab: ITab, i: number) => (
 						<Tab
 							title={ tab.title }/>
 					))}inlineText
@@ -751,10 +758,10 @@ describe('Children - (JSX)', () => {
 	describe('mixed children edge cases', function() {
 		it('NONKEYED - should remove children from correct location when there is dynamic static item', function() {
 			const items = ['a', 'b', 'c'];
-			const emptyArray = [];
+			const emptyArray: any[] = [];
 			const items3 = ['v', 'a'];
 			let visible = false;
-			let activeOne;
+			let activeOne: string[];
 
 			function Loop({ text }) {
 				return (
@@ -803,11 +810,11 @@ describe('Children - (JSX)', () => {
 
 		it('NONKEYED - should remove children from correct location when there is 2 dynamic static items and 2 lists', function() {
 			let items = ['a', 'b', 'c'];
-			let emptyArray = [];
+			let emptyArray: any[] = [];
 			let items3 = ['v', 'a'];
 
-			let activeOne;
-			let activeTwo;
+			let activeOne: string[];
+			let activeTwo: string[];
 			let visibleOne = false;
 			let visibleTwo = false;
 
@@ -871,11 +878,11 @@ describe('Children - (JSX)', () => {
 
 		it('KEYED - should remove children from correct location when there is dynamic static item', function() {
 			let items = ['a', 'b', 'c'];
-			let emptyArray = [];
+			let emptyArray: any[] = [];
 			let items3 = ['v', 'a'];
 			let visible = false;
 
-			let activeOne;
+			let activeOne: string[];
 
 			function Loop({ text }) {
 				return (
@@ -1374,7 +1381,7 @@ describe('Children - (JSX)', () => {
 			}
 
 			class FooBar extends Component<any, any> {
-				constructor(props) {
+				constructor(props: IProps) {
 					super(props);
 
 					this.state = {
@@ -1417,7 +1424,7 @@ describe('Children - (JSX)', () => {
 			let toggle;
 
 			class Wrapper extends Component<any, any> {
-				constructor(props) {
+				constructor(props: IProps) {
 					super(props);
 
 					this.state = {
@@ -1484,7 +1491,7 @@ describe('Children - (JSX)', () => {
 			let toggle;
 
 			class Wrapper extends Component<any, any> {
-				constructor(props) {
+				constructor(props: IProps) {
 					super(props);
 
 					this.state = {
@@ -1557,7 +1564,7 @@ describe('Children - (JSX)', () => {
 			let toggle;
 
 			class Wrapper extends Component<any, any> {
-				constructor(props) {
+				constructor(props: IProps) {
 					super(props);
 
 					this.state = {

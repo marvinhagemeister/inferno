@@ -2,6 +2,9 @@ import {
 	VNodeFlags,
 	createVNode,
 	isVNode,
+	VNode,
+	InfernoInput,
+	IProps,
 } from '../core/shapes';
 import {
 	isArray,
@@ -11,7 +14,7 @@ import {
 	isInvalid
 } from '../shared';
 
-export default function cloneVNode(vNodeToClone, props?, ..._children) {
+export default function cloneVNode(vNodeToClone: InfernoInput, props?: IProps, ..._children: any[]): VNode {
 	let children: any = _children;
 
 	if (_children.length > 0 && !isNull(_children[0])) {
@@ -41,14 +44,15 @@ export default function cloneVNode(vNodeToClone, props?, ..._children) {
 		}
 	}
 	children = null;
-	const flags = vNodeToClone.flags;
+	const flags = (vNodeToClone as VNode).flags;
 	let newVNode;
 
 	if (isArray(vNodeToClone)) {
-		newVNode = vNodeToClone.map((vNode) => cloneVNode(vNode));
+		newVNode = (vNodeToClone as VNode[]).map((vNode) => cloneVNode(vNode));
 	} else if (isNullOrUndef(props) && isNullOrUndef(children)) {
 		newVNode = Object.assign({}, vNodeToClone);
 	} else {
+		vNodeToClone = vNodeToClone as VNode;
 		const key = !isNullOrUndef(vNodeToClone.key) ? vNodeToClone.key : props.key;
 		const ref = vNodeToClone.ref || props.ref;
 

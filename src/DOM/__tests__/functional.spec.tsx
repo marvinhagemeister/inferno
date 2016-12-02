@@ -7,8 +7,8 @@ import {curry} from 'lodash/fp';
 import Type from 'union-type';
 Inferno; // suppress ts 'never used' error
 
-describe('Functional methods (JSX)', () => {
-	let container;
+describe.only('Functional methods (JSX)', () => {
+	let container: Element;
 
 	beforeEach(() => {
 		container = document.createElement('div');
@@ -56,7 +56,7 @@ describe('Functional methods (JSX)', () => {
 
 		const runApp = () => scan(renderer, container, vNodes$).drain();
 
-		runApp();
+		runApp().catch(e => console.log(e));
 		setTimeout(() => {
 			expect(container.innerHTML).to.equal(
 				'<div style="font-size: 48px; font-family: monospace; width: 100%; text-align: center;"><button id="decrement">-</button><div style="font-size: 48px; font-family: monospace; width: 100%; text-align: center;">0</div><button id="increment">+</button></div>'

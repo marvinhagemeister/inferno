@@ -7,6 +7,8 @@ import {
 	waits
 } from '../../tools/utils';
 
+/* tslint:disable max-classes-per-file */
+
 interface Global {
 	usingJSDOM: boolean;
 }
@@ -14,7 +16,7 @@ interface Global {
 let global: Global;
 
 describe('Components (non-JSX)', () => {
-	let container;
+	let container: any;
 
 	beforeEach(() => {
 		container = document.createElement('div');
@@ -29,7 +31,7 @@ describe('Components (non-JSX)', () => {
 
 	class BasicComponent1 extends Component<any, any> {
 		render() {
-			const template = (name, title) =>
+			const template = (name: string, title: string) =>
 				createElement('div', {
 						className: 'basic'
 					},
@@ -42,7 +44,7 @@ describe('Components (non-JSX)', () => {
 	}
 
 	it('should render a basic component', () => {
-		let template = (Component, title) =>
+		let template = (Component, title: any) =>
 			createElement('div', null,
 				createElement(Component, {
 					title,
@@ -127,7 +129,7 @@ describe('Components (non-JSX)', () => {
 	}
 //
 	it('should render a basic component with inputs', () => {
-		let template = (Component, title, isChecked) =>
+		let template = (Component, title, isChecked: boolean) =>
 			createElement('div', null,
 				createElement(Component, {
 					title,
@@ -159,7 +161,7 @@ describe('Components (non-JSX)', () => {
 
 	class BasicComponent1c extends Component<any, any> {
 		render() {
-			const template = (isEnabled, title, type) =>
+			const template = (isEnabled: boolean, title, type) =>
 				createElement('div', {
 						className: 'basic'
 					},
@@ -177,7 +179,7 @@ describe('Components (non-JSX)', () => {
 	}
 
 	it('should render a basic component with input tag and attributes', () => {
-		let template = (Component, title, isEnabled) =>
+		let template = (Component, title, isEnabled: boolean) =>
 			createElement('div', null,
 				createElement(Component, {
 					title,
@@ -206,7 +208,7 @@ describe('Components (non-JSX)', () => {
 
 	class BasicComponent1d extends Component<any, any> {
 		render() {
-			const template = (isDisabled, title) =>
+			const template = (isDisabled: boolean, title) =>
 				createElement('div', { className: 'basic' },
 					createElement('label', {},
 						createElement('input', { type: 'password', disabled: isDisabled }),
@@ -219,7 +221,7 @@ describe('Components (non-JSX)', () => {
 	}
 
 	it('should render a basic component with inputs #3', () => {
-		let template = (Component, title, isDisabled) =>
+		let template = (Component, title, isDisabled: boolean) =>
 			createElement('div', null,
 				createElement(Component, { title, isDisabled })
 			);
@@ -272,7 +274,7 @@ describe('Components (non-JSX)', () => {
 
 	it('should render a basic component and remove property if null #2', () => {
 
-		let template = (Component, title, name) =>
+		let template = (Component, title, name: string) =>
 			createElement('div', null,
 				createElement(Component, { title, name })
 			);
@@ -296,7 +298,7 @@ describe('Components (non-JSX)', () => {
 	});
 
 	it('should render a basic root component', () => {
-		let template = (Component, title, name) =>
+		let template = (Component: any, title: any, name: any) =>
 			createElement(Component, { title, name });
 
 		render(template(BasicComponent1, 'abc', 'basic-render'), container);
@@ -333,7 +335,7 @@ describe('Components (non-JSX)', () => {
 
 	class BasicComponent2 extends Component<any, any> {
 		render() {
-			const template = (name, title, children) =>
+			const template = (name: any, title: any, children: any) =>
 					createElement('div', {
 							className: 'basic'
 						},
@@ -348,7 +350,7 @@ describe('Components (non-JSX)', () => {
 	}
 
 	it('should render a basic component with children', () => {
-		let template = (Component, title, name) =>
+		let template = (Component: any, title: any, name: any) =>
 			createElement('div', null,
 				createElement(Component, {
 						title,
@@ -613,8 +615,8 @@ describe('Components (non-JSX)', () => {
 	});
 
 	it('should mount and unmount a basic component', () => {
-		let mountCount;
-		let unmountCount;
+		let mountCount: number;
+		let unmountCount: number;
 		let template;
 
 		class ComponentLifecycleCheck extends Component<any, any> {
@@ -647,8 +649,8 @@ describe('Components (non-JSX)', () => {
 	});
 
 	it('should mount and unmount a basic component #2', () => {
-		let mountCount;
-		let unmountCount;
+		let mountCount: number;
+		let unmountCount: number;
 
 		class ComponentLifecycleCheck extends Component<any, any> {
 			render() {
@@ -680,7 +682,7 @@ describe('Components (non-JSX)', () => {
 	});
 
 	describe('state changes should trigger all lifecycle events for an update', () => {
-		let componentWillMountCount;
+		let componentWillMountCount: number;
 		let template;
 
 		class ComponentLifecycleCheck extends Component<any, any> {
@@ -728,10 +730,10 @@ describe('Components (non-JSX)', () => {
 	});
 
 	describe('state changes should trigger all lifecycle events for an update #2', () => {
-		let componentWillMountCount;
-		let shouldComponentUpdateCount;
-		let componentDidUpdateCount;
-		let componentWillUpdateCount;
+		let componentWillMountCount: number;
+		let shouldComponentUpdateCount: number;
+		let componentDidUpdateCount: number;
+		let componentWillUpdateCount: number;
 		let template;
 
 		class ComponentLifecycleCheck extends Component<any, any> {
@@ -1073,15 +1075,15 @@ describe('Components (non-JSX)', () => {
 	});
 
 	describe('should render a component with a list of text nodes', () => {
-		const root = function(children) {
+		const root = function(children: any) {
 			return createElement('div', null, children);
 		};
 
-		const header = function(children) {
+		const header = function(children: string[]) {
 			return createElement('div', null, children);
 		};
 
-		const view = function(state) {
+		const view = function(state: boolean) {
 			return root([
 				(state
 					? header(['Foo'])

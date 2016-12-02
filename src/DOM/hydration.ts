@@ -21,6 +21,7 @@ import {
 
 import Lifecycle from './lifecycle';
 import {
+	VNode,
 	VNodeFlags,
 } from '../core/shapes';
 import { componentToDOMNodeMap } from './rendering';
@@ -55,7 +56,7 @@ export function normaliseChildNodes(dom) {
 	}
 }
 
-function hydrateComponent(vNode, dom, lifecycle, context, isSVG, isClass) {
+function hydrateComponent(vNode: VNode, dom: Element, lifecycle: Lifecycle, context: any, isSVG: boolean, isClass: number) {
 	const type = vNode.type;
 	const props = vNode.props;
 	const ref = vNode.ref;
@@ -63,7 +64,7 @@ function hydrateComponent(vNode, dom, lifecycle, context, isSVG, isClass) {
 	vNode.dom = dom;
 	if (isClass) {
 		const _isSVG = dom.namespaceURI === svgNS;
-		const defaultProps = type.defaultProps;
+		const defaultProps = (type as any).defaultProps;
 
 		lifecycle.fastUnmount = false;
 		if (!isUndefined(defaultProps)) {
@@ -75,7 +76,7 @@ function hydrateComponent(vNode, dom, lifecycle, context, isSVG, isClass) {
 		const fastUnmount = lifecycle.fastUnmount;
 
 		// we store the fastUnmount value, but we set it back to true on the lifecycle
-		// we do this so we can determine if the component render has a fastUnmount or not		
+		// we do this so we can determine if the component render has a fastUnmount or not
 		lifecycle.fastUnmount = true;
 		instance._vComponent = vNode;
 		instance._vNode = vNode;
@@ -98,7 +99,7 @@ function hydrateComponent(vNode, dom, lifecycle, context, isSVG, isClass) {
 	}
 }
 
-function hydrateElement(vNode, dom, lifecycle, context, isSVG) {
+function hydrateElement(vNode: VNode, dom: Element, lifecycle: Lifecycle, context: any, isSVG: boolean) {
 	const tag = vNode.type;
 	const children = vNode.children;
 	const props = vNode.props;
@@ -128,7 +129,7 @@ function hydrateElement(vNode, dom, lifecycle, context, isSVG) {
 	}
 }
 
-function hydrateChildren(children, dom, lifecycle, context, isSVG) {
+function hydrateChildren(children: any, dom: Element, lifecycle: Lifecycle, context: any, isSVG: boolean) {
 	normaliseChildNodes(dom);
 	const domNodes = Array.prototype.slice.call(dom.childNodes);
 	let childNodeIndex = 0;
@@ -146,7 +147,7 @@ function hydrateChildren(children, dom, lifecycle, context, isSVG) {
 	}
 }
 
-function hydrateText(vNode, dom) {
+function hydrateText(vNode: VNode, dom: Element) {
 	if (dom.nodeType === 3) {
 		const newDom = mountText(vNode, null);
 
@@ -157,11 +158,11 @@ function hydrateText(vNode, dom) {
 	}
 }
 
-function hydrateVoid(vNode, dom) {
+function hydrateVoid(vNode: VNode, dom: Element) {
 	vNode.dom = dom;
 }
 
-function hydrate(vNode, dom, lifecycle, context, isSVG) {
+function hydrate(vNode: VNode, dom: any, lifecycle: Lifecycle, context: any, isSVG: boolean) {
 	if (process.env.NODE_ENV !== 'production') {
 		if (isInvalid(dom)) {
 			throwError(`failed to hydrate. The server-side render doesn't match client side.`);
@@ -185,7 +186,7 @@ function hydrate(vNode, dom, lifecycle, context, isSVG) {
 	}
 }
 
-export default function hydrateRoot(input, parentDom, lifecycle) {
+export default function hydrateRoot(input, parentDom: HTMLElement, lifecycle: Lifecycle) {
 	if (parentDom && parentDom.nodeType === 1 && parentDom.firstChild) {
 		hydrate(input, parentDom.firstChild, lifecycle, {}, false);
 		return true;

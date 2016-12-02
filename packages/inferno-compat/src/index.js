@@ -5,7 +5,7 @@ import infernoCreateElement from '../../../build/factories/createElement';
 import cloneVNode from '../../../build/factories/cloneVNode';
 import { render, findDOMNode } from '../../../build/DOM/rendering';
 import { createVNode } from '../../../build/core/shapes';
-import Component from 'inferno-component';
+import Component from '../../../build/component/es2015';
 import { NO_OP } from '../../../build/shared';
 
 function unmountComponentAtNode(container) {
@@ -56,16 +56,16 @@ const version = '15.4.1';
 function normalizeProps(name, props) {
 	if ((name === 'input' || name === 'textarea') && props.onChange) {
 		const eventName = props.type === 'checkbox' ? 'onclick' : 'oninput'
-		
+
 		if (!props[eventName]) {
 			props[eventName] = props.onChange;
-			delete props.onChange; 
+			delete props.onChange;
 		}
 	}
 }
 
 // we need to add persist() to Event (as React has it for synthetic events)
-// this is a hack and we really shouldn't be modifying a global object this way, 
+// this is a hack and we really shouldn't be modifying a global object this way,
 // but there isn't a performant way of doing this apart from trying to proxy
 // every prop event that starts with "on", i.e. onClick or onKeyPress
 // but in reality devs use onSomething for many things, not only for

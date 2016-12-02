@@ -1,4 +1,5 @@
 import Component from 'inferno-component';
+import { IProps } from './shapes';
 import { warning } from './utils';
 import {
 	isNullOrUndef,
@@ -20,7 +21,7 @@ function warnAboutReceivingStore() {
 export default class Provider extends Component<any, any> {
 	store: any;
 
-	constructor(props, context?: any) {
+	constructor(props: IProps, context?: any) {
 		super(props, context);
 		this.store = props.store;
 	}

@@ -6,10 +6,12 @@ import {
 } from './utils';
 
 import Component from 'inferno-component';
-import { IProps } from '../core/shapes';
+import { IObject } from '../core/shapes';
 import createElement from 'inferno-create-element';
 import hoistStatics from 'hoist-non-inferno-statics';
 import { isPlainObject } from './helpers';
+import { Store, Dispatch } from './shapes';
+import { IProps } from './shapes';
 
 export interface WrapWithConnect {
 	(WrappedComponent: any): any;
@@ -27,18 +29,21 @@ export interface MapDispatchToPropsFactory {
 	(dispatch: (action: any) => void, props?: IProps) : MapDispatchToPropsFunction;
 }
 
-type MapDispatchToProps = MapDispatchToPropsFunction | {[index: string]: MapDispatchToPropsFunction} | MapDispatchToPropsFactory;
+export type MapDispatchToProps = MapDispatchToPropsFunction | {[index: string]: MapDispatchToPropsFunction} | MapDispatchToPropsFactory;
 
-const errorObject = { value: null };
-const defaultMapStateToProps = (state) => ({}); // eslint-disable-line no-unused-vars
-const defaultMapDispatchToProps = (dispatch) => ({ dispatch });
-const defaultMergeProps = (stateProps, dispatchProps, parentProps) => Object.assign({},
+interface ErrorObj {
+	value: any;
+}
+const errorObject: ErrorObj = { value: null };
+const defaultMapStateToProps = (state: any) => ({}); // eslint-disable-line no-unused-vars
+const defaultMapDispatchToProps = (dispatch: Dispatch) => ({ dispatch });
+const defaultMergeProps = (stateProps: IObject, dispatchProps: IObject, parentProps: IObject) => Object.assign({},
 	parentProps,
 	stateProps,
 	dispatchProps
 );
 
-function tryCatch(fn, ctx) {
+function tryCatch(fn: Function, ctx: any) {
 	try {
 		return fn.apply(ctx);
 	} catch (e) {
@@ -55,11 +60,11 @@ function getDisplayName(WrappedComponent) {
 let nextVersion = 0;
 
 export default function connect(
-	mapStateToProps?: MapStateToProps, mapDispatchToProps?: MapDispatchToProps, mergeProps?, options: any = {}
+	mapStateToProps?: MapStateToProps, mapDispatchToProps?: MapDispatchToProps, mergeProps?: any, options: any = {}
 ): WrapWithConnect {
 	const shouldSubscribe = Boolean(mapStateToProps);
 	const mapState = mapStateToProps || defaultMapStateToProps;
-	let mapDispatch;
+	let mapDispatch: any;
 
 	if (isFunction(mapDispatchToProps)) {
 		mapDispatch = mapDispatchToProps;
@@ -77,7 +82,7 @@ export default function connect(
 	return function wrapWithConnect(WrappedComponent: Component<any, any>) {
 		const connectDisplayName = `Connect(${getDisplayName(WrappedComponent)})`;
 
-		function checkStateShape(props, methodName) {
+		function checkStateShape(props: IProps, methodName: string) {
 			if (!isPlainObject(props)) {
 				warning(
 					`${methodName}() in ${connectDisplayName} must return a plain object. ` +
@@ -86,7 +91,7 @@ export default function connect(
 			}
 		}
 
-		function computeMergedProps(stateProps, dispatchProps, parentProps) {
+		function computeMergedProps(stateProps: IObject, dispatchProps: IObject, parentProps: IObject) {
 			const mergedProps = finalMergeProps(stateProps, dispatchProps, parentProps);
 			if (process.env.NODE_ENV !== 'production') {
 				checkStateShape(mergedProps, 'mergeProps');
@@ -112,11 +117,11 @@ export default function connect(
 			haveStatePropsBeenPrecalculated: boolean;
 			statePropsPrecalculationError: any;
 			renderedElement: any;
-			componentDidMount: any;
-			componentWillUpdate: any;
+			state: any;
+			props: any;
 			wrappedInstance: any;
 
-			constructor(props, context) {
+			constructor(props: IProps, context: any) {
 				super(props, context);
 
 				this.version = version;
@@ -142,7 +147,7 @@ export default function connect(
 				return !pure || this.haveOwnPropsChanged || this.hasStoreStateChanged;
 			}
 
-			computeStateProps(store, props) {
+			computeStateProps(store: any, props: IProps): IProps {
 				if (!this.finalMapStateToProps) {
 					return this.configureFinalMapState(store, props);
 				}
@@ -154,7 +159,7 @@ export default function connect(
 				return stateProps;
 			}
 
-			configureFinalMapState(store, props) {
+			configureFinalMapState(store: Store, props: IProps) {
 				const mappedState = mapState(store.getState(), props);
 				const isFactory = isFunction(mappedState);
 
@@ -166,7 +171,7 @@ export default function connect(
 				return mappedState;
 			}
 
-			computeDispatchProps(store, props) {
+			computeDispatchProps(store: Store, props: IProps): IProps {
 				if (!this.finalMapDispatchToProps) {
 					return this.configureFinalMapDispatch(store, props);
 				}
@@ -178,7 +183,7 @@ export default function connect(
 				return dispatchProps;
 			}
 
-			configureFinalMapDispatch(store, props) {
+			configureFinalMapDispatch(store: Store, props: IProps) {
 				const mappedDispatch = mapDispatch(store.dispatch, props);
 				const isFactory = isFunction(mappedDispatch);
 
@@ -239,7 +244,7 @@ export default function connect(
 				}
 			}
 
-			componentWillReceiveProps(nextProps) {
+			componentWillReceiveProps(nextProps: IProps) {
 				if (!pure || !shallowEqual(nextProps, this.props)) {
 					this.haveOwnPropsChanged = true;
 				}

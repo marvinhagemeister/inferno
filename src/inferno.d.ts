@@ -10,17 +10,43 @@ declare module 'inferno' {
 
 declare module 'inferno-component' {
 	class Component<P, C> {
-		refs?: any;
-		state?: any;
-		props?: P;
-		context?: C;
-		_unmounted?: boolean;
-		constructor (props?: P, context?: C);
+		static defaultProps: any;
+		refs: any;
+		state: any;
+		props: P;
+		context: C;
+		_beforeRender: any;
+		_afterRender: any;
+		_processingSetState: boolean;
+		_blockRender: boolean;
+		_ignoreSetState: boolean;
+		_blockSetState: boolean;
+		_deferSetState: boolean;
+		_pendingSetState: boolean;
+		_pendingState: any;
+		_lastInput: any;
+		_vNode: any;
+		_unmounted: boolean;
+		_devToolsStatus: any;
+		_devToolsId: any;
+		_lifecycle: any;
+		_childContext: any;
+		_patch: any;
+		_isSVG: boolean;
+		_updateComponent: any;
+		_componentToDOMNodeMap: boolean;
+		constructor(props?: P, context?: C);
 		componentWillReact();
-		componentWillReceiveProps? (nextProps: P, nextContext: C): void;
-		forceUpdate (): void;
-		setState (v: Object, cb?: () => {}): boolean;
-		isPrototypeOf (v: Object): void;
+		componentWillMount(): any;
+		componentWillUnmount(): any;
+		componentDidUpdate(): any;
+		componentWillUpdate(): any;
+		shouldComponentUpdate(): boolean;
+		componentDidMount(): any;
+		componentWillReceiveProps(nextProps: P, nextContext: C): void;
+		forceUpdate(): void;
+		setState(v: Object, cb?: () => {}): boolean;
+		isPrototypeOf(v: Object): void;
 	}
 	export default Component;
 }
@@ -49,7 +75,7 @@ declare module 'invariant' {
 }
 
 declare module 'hoist-non-inferno-statics' {
-	function hoistStatics(connectClass: any, wrappedComponent: any): {[index: string]: any};
+	function hoistStatics(connectClass: any, wrappedComponent: any): { [index: string]: any };
 	export = hoistStatics;
 }
 

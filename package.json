@@ -142,7 +142,8 @@
   },
   "scripts": {
     "browser": "webpack-dev-server --config config/webpack.dev.conf.js",
-    "build": "npm run clean && mkdirp build && (tsc --outDir build --module es6 || true) && npm run build:dev && npm run build:prod",
+    "bq": "tsc",
+    "build": "npm run clean && mkdirp build && (tsc || true) && npm run build:dev && npm run build:prod",
     "build:dev": "cross-env NODE_ENV=development babel-node --presets es2015 config/rollup.config.js",
     "build:prod": "cross-env NODE_ENV=production babel-node --presets es2015 config/rollup.config.js",
     "clean": "rimraf coverage/ build/",
@@ -159,7 +160,8 @@
     "server:cov:publish": "npm run server:cov && coveralls < coverage/lcov.info && rimraf coverage",
     "test": "npm run lint && npm run test:browser && npm run test:server",
     "test:browser": "karma start config/karma.conf.js",
-    "test:server": "cross-env nyc mocha --opts config/mocha.opts"
+    "test:server": "cross-env nyc mocha --opts config/mocha.opts",
+    "tq": "mocha --opts config/mocha.opts"
   },
   "pre-commit": [
     "lint",

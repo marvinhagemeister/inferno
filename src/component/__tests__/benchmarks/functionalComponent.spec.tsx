@@ -2,7 +2,7 @@ import { render } from './../../../DOM/rendering';
 import * as Inferno from '../../../testUtils/inferno';
 Inferno; // suppress ts 'never used' error
 
-function runBenchmark(container) {
+function runBenchmark(container: HTMLElement) {
 	let Link0 = function() {
 		return <a href={'/'} className={'_5ljn'} rel={undefined} onClick={function () { } }/>;
 	};

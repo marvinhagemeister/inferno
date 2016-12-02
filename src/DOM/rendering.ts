@@ -19,7 +19,7 @@ import { mount } from './mounting';
 import { patch } from './patching';
 import { unmount } from './unmounting';
 
-interface Root {
+export interface Root {
 	dom: Node | SVGAElement;
 	input: InfernoInput;
 	lifecycle: Lifecycle;
@@ -87,7 +87,7 @@ export function render(input: InfernoInput, parentDom?: Node | SVGAElement) {
 				input = cloneVNode(input);
 			}
 			if (!hydrateRoot(input, parentDom, lifecycle)) {
-				mount(input, parentDom, lifecycle, {}, false);
+				mount(input as any, parentDom as HTMLElement, lifecycle, {}, false);
 			}
 			lifecycle.trigger();
 			setRoot(parentDom, input, lifecycle);
@@ -97,13 +97,13 @@ export function render(input: InfernoInput, parentDom?: Node | SVGAElement) {
 
 		lifecycle.listeners = [];
 		if (isNullOrUndef(input)) {
-			unmount(root.input, parentDom, lifecycle, false, false, false);
+			unmount(root.input as any, parentDom, lifecycle, false, false, false);
 			removeRoot(root);
 		} else {
 			if ((input as VNode).dom) {
 				input = cloneVNode(input);
 			}
-			patch(root.input, input, parentDom, lifecycle, {}, false, false);
+			patch(root.input as any, input as any, parentDom as any, lifecycle, {}, false, false);
 		}
 		lifecycle.trigger();
 		root.input = input;

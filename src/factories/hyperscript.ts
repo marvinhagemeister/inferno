@@ -2,6 +2,8 @@ import {
 	VNode,
 	VNodeFlags,
 	createVNode,
+	IProps,
+	VNodeType,
 } from '../core/shapes';
 import {
 	isArray,
@@ -11,10 +13,12 @@ import {
 	isUndefined,
 } from '../shared';
 
+export type Stateful = (node?: VNode) => VNode;
+
 const classIdSplit = /([.#]?[a-zA-Z0-9_:-]+)/;
 const notClassId = /^\.|#/;
 
-function parseTag(tag, props) {
+function parseTag(tag: string, props: IProps) {
 	if (!tag) {
 		return 'div';
 	}
@@ -53,14 +57,14 @@ function parseTag(tag, props) {
 	return tagName ? tagName.toLowerCase() : 'div';
 }
 
-function isChildren(x) {
+function isChildren(x: any) {
 	return isStringOrNumber(x) || (x && isArray(x));
 }
 
-function extractProps(_props, _tag) {
+function extractProps(_props: IProps, _tag: VNodeType) {
 	_props = _props || {};
-	const tag = isString(_tag) ? parseTag(_tag, _props) : _tag;
-	const props = {};
+	const tag = isString(_tag) ? parseTag(_tag as string, _props) : _tag;
+	const props: IProps = {};
 	let key = null;
 	let ref = null;
 	let children = null;
@@ -86,13 +90,17 @@ function extractProps(_props, _tag) {
 	return { tag, props, key, ref, children };
 }
 
-export default function hyperscript(_tag, _props?, _children?, _childrenType?): VNode {
+export type Children = number | string | VNode[] | null;
+
+export default function hyperscript(_tag: VNodeType, _children?: Children): VNode;
+export default function hyperscript(_tag: VNodeType, _props: IProps, _children?: Children): VNode;
+export default function hyperscript(_tag: VNodeType, _props?: IProps | Children, _children?: Children): VNode {
 	// If a child array or text node are passed as the second argument, shift them
 	if (!_children && isChildren(_props)) {
-		_children = _props;
+		_children = _props as Children;
 		_props = {};
 	}
-	const { tag, props, key, ref, children } = extractProps(_props, _tag);
+	const { tag, props, key, ref, children } = extractProps(_props as IProps, _tag);
 
 	if (isString(tag)) {
 		let flags = VNodeFlags.HtmlElement;
@@ -117,7 +125,7 @@ export default function hyperscript(_tag, _props?, _children?, _childrenType?): 
 		const flags = isStatefulComponent(tag) ? VNodeFlags.ComponentClass : VNodeFlags.ComponentFunction;
 
 		if (children) {
-			(props as any).children = children;
+			props.children = children;
 		}
 		return createVNode(flags, tag, props, null, key, ref);
 	}

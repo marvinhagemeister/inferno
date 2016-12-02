@@ -7,16 +7,35 @@ import {
 	isUndefined,
 } from '../shared';
 
+import Component from "../component/es2015";
+
 import cloneVNode from '../factories/cloneVNode';
 
-export interface IProps {
-	[index: string]: any;
+export interface DevToolsStatus {
+	connected: boolean;
 }
+
+export interface IObject {
+	[key: string]: any;
+}
+
+export interface IProps extends IObject {
+	id?: string;
+	className?: string;
+	children?: any;
+	key?: string | number;
+	ref?: any;
+	style?: IObject;
+	dangerouslySetInnerHTML?: {
+		__html: string
+	};
+}
+
 export interface VType {
 	flags: VNodeFlags;
 }
 
-export type InfernoInput = VNode | VNode[] | null | string | string[] | number | number[];
+export type InfernoInput = VNode | VNode[] | null | String | String[] | number | number[];
 
 export const enum VNodeFlags {
 	Text = 1,
@@ -39,14 +58,32 @@ export const enum VNodeFlags {
 	Component = ComponentFunction | ComponentClass | ComponentUnknown
 }
 
-export interface VNode {
-	children: string | Array<string | VNode> | VNode | null;
-	dom: Node | null;
+export interface NodeState {
+	_lifecycle?: any;
+	_lastInput?: any;
+	_unmounted?: boolean;
+	_ignoreSetState?: boolean;
+	_devToolsStatus?: DevToolsStatus;
+}
+
+export type CallbackRef = (args?: any) => any;
+
+export type VNodeCreator = (nextProps?: IProps, context?: any) => VNode;
+export type VNodeType = string | (new() => Component<any, any>) | VNodeCreator;
+
+export interface VNode extends NodeState {
+	children: Component<any, any> | String | Array<String | VNode> | VNode | null;
+	dom: VNode | HTMLElement | Element | Text | null;
 	flags: VNodeFlags;
 	key: string | number | null;
-	props: Object | null;
-	ref: Function | null;
-	type: string | Function | null;
+	props: IProps | null;
+	ref: Component<any, any> | CallbackRef | null;
+	type: VNodeType;
+	parentVNode?: VNode;
+	value?: string;
+	checked?: boolean;
+	name?: string;
+	multiple?: boolean;
 }
 
 function _normalizeVNodes(nodes: any[], result: VNode[], i: number): void {
@@ -68,21 +105,25 @@ function _normalizeVNodes(nodes: any[], result: VNode[], i: number): void {
 	}
 }
 
-export function normalizeVNodes(nodes: any[]): VNode[] {
+export interface VNodeArray extends Array<VNode> {
+	$?: any | boolean;
+}
+
+export function normalizeVNodes(nodes: VNodeArray): VNode[] {
 	let newNodes;
 
 	// we assign $ which basically means we've flagged this array for future note
 	// if it comes back again, we need to clone it, as people are using it
 	// in an immutable way
 	// tslint:disable
-	if (nodes['$']) { 
+	if (nodes['$']) {
 		nodes = nodes.slice();
 	} else {
 		nodes['$'] = true;
 	}
 	// tslint:enable
 	for (let i = 0; i < nodes.length; i++) {
-		const n = nodes[i];
+		const n: any = nodes[i];
 
 		if (isInvalid(n)) {
 			if (!newNodes) {
@@ -111,7 +152,7 @@ export function normalizeVNodes(nodes: any[]): VNode[] {
 	return newNodes || nodes as VNode[];
 }
 
-function normalize(vNode) {
+function normalize(vNode: VNode) {
 	const props = vNode.props;
 	const children = vNode.children;
 
@@ -128,18 +169,18 @@ function normalize(vNode) {
 	}
 	if (!isInvalid(children)) {
 		if (isArray(children)) {
-			vNode.children = normalizeVNodes(children);
-		} else if (isVNode(children) && children.dom) {
-			vNode.children = cloneVNode(children);
+			vNode.children = normalizeVNodes(children as VNodeArray);
+		} else if (isVNode(children) && (children as VNode).dom) {
+			vNode.children = cloneVNode(children as VNode);
 		}
 	}
 }
 
-export function createVNode(flags, type?, props?, children?, key?, ref?, noNormalise?: boolean): VNode {
+export function createVNode(flags: VNodeFlags, type?: VNodeType, props?: IProps, children?: any, key?: string | number, ref?: any, noNormalise?: boolean): VNode {
 	if (flags & VNodeFlags.ComponentUnknown) {
 		flags = isStatefulComponent(type) ? VNodeFlags.ComponentClass : VNodeFlags.ComponentFunction;
 	}
-	const vNode = {
+	const vNode: VNode = {
 		children: isUndefined(children) ? null : children,
 		dom: null,
 		flags: flags || 0,
@@ -156,7 +197,7 @@ export function createVNode(flags, type?, props?, children?, key?, ref?, noNorma
 
 // when a components root VNode is also a component, we can run into issues
 // this will recursively look for vNode.parentNode if the VNode is a component
-export function updateParentComponentVNodes(vNode, dom) {
+export function updateParentComponentVNodes(vNode: VNode, dom: HTMLElement) {
 	if (vNode.flags & VNodeFlags.Component) {
 		const parentVNode = vNode.parentVNode;
 
@@ -171,10 +212,10 @@ export function createVoidVNode() {
 	return createVNode(VNodeFlags.Void);
 }
 
-export function createTextVNode(text) {
+export function createTextVNode(text: string | number) {
 	return createVNode(VNodeFlags.Text, null, null, text);
 }
 
-export function isVNode(o: VType): boolean {
+export function isVNode(o: any): boolean {
 	return !!o.flags;
 }

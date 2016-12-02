@@ -11,10 +11,12 @@ import { createStore } from 'redux';
 import * as Inferno from '../../testUtils/inferno';
 Inferno; // suppress ts 'never used' error
 
+/* tslint:disable max-classes-per-file */
+
 const browserHistory = (typeof window !== 'undefined') ? createBrowserHistory() : createMemoryHistory();
 
 describe('Provider (JSX)', () => {
-	let container;
+	let container: HTMLElement;
 	let attachedListener = null;
 	let renderedName = null;
 
@@ -46,7 +48,7 @@ describe('Provider (JSX)', () => {
 			const store = this.context.store;
 			const state = store.getState();
 
-			const onClick = e => {
+			const onClick = (e: Event) => {
 				e.preventDefault();
 				store.dispatch({
 					type: 'CHANGE_NAME',
@@ -131,7 +133,7 @@ describe('Provider (JSX)', () => {
 
 		expect(container.innerHTML).to.equal('<div><div class="basic"><a id="dispatch"><span>Hello Tom</span></a></div><div class="basic2">You\'re a cat!</div></div>');
 
-		const link = container.querySelector('#dispatch');
+		const link = container.querySelector('#dispatch') as HTMLElement;
 		link.click();
 
 		expect(container.innerHTML).to.equal('<div><div class="basic"><a id="dispatch"><span>Hello Jerry</span></a></div><div class="basic2">You\'re a mouse!</div></div>');
@@ -168,7 +170,7 @@ describe('Provider (JSX)', () => {
 
 		expect(container.innerHTML).to.equal('<div><div class="basic"><a id="dispatch"><span>Hello Tom</span></a></div></div>');
 
-		const link = container.querySelector('#dispatch');
+		const link = container.querySelector('#dispatch') as HTMLElement;
 		link.click();
 
 		expect(container.innerHTML).to.equal('<div><div class="basic2">You\'re a mouse!</div></div>');

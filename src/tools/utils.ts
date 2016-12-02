@@ -4,16 +4,16 @@ import {
 	isStringOrNumber,
 } from '../shared';
 
-import { VNodeFlags } from '../core/shapes';
+import { VNode, VNodeFlags } from '../core/shapes';
 
 const comparer = document.createElement('div');
 
-export function innerHTML(HTML) {
+export function innerHTML(HTML: string) {
 	comparer.innerHTML = HTML;
 	return comparer.innerHTML;
 }
 
-export function createStyler(CSS) {
+export function createStyler(CSS: string) {
 	if (typeof CSS === 'undefined' || CSS === null) {
 		return CSS;
 	}
@@ -21,7 +21,7 @@ export function createStyler(CSS) {
 	return comparer.style.cssText;
 }
 
-export function style(CSS) {
+export function style(CSS: string | string[]): string | string[] {
 	if (CSS instanceof Array) {
 		return CSS.map(createStyler);
 	} else {
@@ -29,20 +29,21 @@ export function style(CSS) {
 	}
 }
 
-export function createContainerWithHTML(html) {
+export function createContainerWithHTML(html: string) {
 	const container = document.createElement('div');
 
 	container.innerHTML = html;
 	return container;
 }
 
-export function validateNodeTree(node) {
+export function validateNodeTree(node: VNode | number | String) {
 	if (!node) {
 		return true;
 	}
 	if (isStringOrNumber(node)) {
 		return true;
 	}
+	node = node as VNode;
 	if (!node.dom) {
 		return false;
 	}
@@ -60,7 +61,7 @@ export function validateNodeTree(node) {
 					}
 				}
 			} else {
-				const val = validateNodeTree(children);
+				const val = validateNodeTree(children as any);
 
 				if (!val) {
 					return false;
@@ -71,12 +72,12 @@ export function validateNodeTree(node) {
 	return true;
 }
 
-export function waits(timer, done) {
+export function waits(timer: number, done: any) {
 	setTimeout(done, timer);
 }
 
-export function triggerEvent(name, element) {
-	let eventType;
+export function triggerEvent(name: string, element: Element) {
+	let eventType: string;
 
 	if (name === 'click' || name === 'dblclick' || name === 'mousedown' || name === 'mouseup') {
 		eventType = 'MouseEvents';
@@ -84,9 +85,9 @@ export function triggerEvent(name, element) {
 		eventType = 'HTMLEvents';
 	} else {
 		throw new Error('Unsupported `"' + name + '"`event');
-
 	}
+
 	const event = document.createEvent(eventType);
 	event.initEvent(name, name !== 'change', true);
-	element.dispatchEvent(event, true);
+	element.dispatchEvent(event);
 }

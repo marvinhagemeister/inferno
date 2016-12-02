@@ -1,4 +1,5 @@
 import { VNode, VNodeFlags } from '../core/shapes';
+import Lifecycle from './lifecycle';
 import {
 	isNull,
 	isUndefined,
@@ -27,8 +28,8 @@ export function enableRecycling() {
 	recyclingEnabled = true;
 }
 
-export function recycleElement(vNode, lifecycle, context, isSVG) {
-	const tag = vNode.type;
+export function recycleElement(vNode: VNode, lifecycle: Lifecycle, context, isSVG: boolean) {
+	const tag = vNode.type as string;
 	const key = vNode.key;
 	let pools: Pools = elementPools.get(tag);
 
@@ -47,8 +48,8 @@ export function recycleElement(vNode, lifecycle, context, isSVG) {
 	return null;
 }
 
-export function poolElement(vNode) {
-	const tag = vNode.type;
+export function poolElement(vNode: VNode) {
+	const tag = vNode.type as string;
 	const key = vNode.key;
 	let pools: Pools = elementPools.get(tag);
 
@@ -72,7 +73,7 @@ export function poolElement(vNode) {
 	}
 }
 
-export function recycleComponent(vNode: VNode, lifecycle, context, isSVG) {
+export function recycleComponent(vNode: VNode, lifecycle: Lifecycle, context, isSVG: boolean): Element {
 	const type = vNode.type as Function;
 	const key = vNode.key;
 	let pools: Pools = componentPools.get(type);
@@ -97,7 +98,7 @@ export function recycleComponent(vNode: VNode, lifecycle, context, isSVG) {
 				);
 
 				if (!failed) {
-					return vNode.dom;
+					return vNode.dom as Element;
 				}
 			}
 		}

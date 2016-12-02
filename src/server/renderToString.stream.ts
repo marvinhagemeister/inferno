@@ -16,6 +16,7 @@ import {
 import { Readable } from 'stream';
 import {
 	VNodeFlags,
+	VNode
 } from '../core/shapes';
 
 export class RenderStream extends Readable {
@@ -23,7 +24,7 @@ export class RenderStream extends Readable {
 	staticMarkup: any;
 	started: boolean = false;
 
-	constructor(initNode, staticMarkup) {
+	constructor(initNode: VNode, staticMarkup: boolean) {
 		super();
 		this.initNode = initNode;
 		this.staticMarkup = staticMarkup;
@@ -44,7 +45,7 @@ export class RenderStream extends Readable {
 		});
 	}
 
-	renderNode(vNode, context, isRoot) {
+	renderNode(vNode: VNode, context, isRoot: boolean) {
 		if (isInvalid(vNode)) {
 			return;
 		} else {
@@ -60,7 +61,7 @@ export class RenderStream extends Readable {
 		}
 	}
 
-	renderComponent(vComponent, isRoot, context, isClass) {
+	renderComponent(vComponent, isRoot: boolean, context, isClass: boolean | number) {
 		const type = vComponent.type;
 		const props = vComponent.props;
 
@@ -137,14 +138,14 @@ export class RenderStream extends Readable {
 		}, Promise.resolve(false));
 	}
 
-	renderText(vNode, isRoot, context) {
+	renderText(vNode: VNode, isRoot: boolean, context) {
 		return Promise.resolve().then((insertComment) => {
 			this.push(vNode.children);
 			return insertComment;
 		});
 	}
 
-	renderElement(vElement, isRoot, context) {
+	renderElement(vElement: VNode, isRoot: boolean, context) {
 		const tag = vElement.type;
 		const props = vElement.props;
 
@@ -185,10 +186,10 @@ export class RenderStream extends Readable {
 	}
 }
 
-export default function streamAsString(node) {
+export default function streamAsString(node: VNode) {
 	return new RenderStream(node, false);
 }
 
-export function streamAsStaticMarkup(node) {
+export function streamAsStaticMarkup(node: VNode) {
 	return new RenderStream(node, true);
 }

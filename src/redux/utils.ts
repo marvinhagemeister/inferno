@@ -1,3 +1,4 @@
+import { IObject } from "../core/shapes";
 import { bindActionCreators } from 'redux';
 
 /**
@@ -6,7 +7,7 @@ import { bindActionCreators } from 'redux';
  * @param {String} message The warning message.
  * @returns {void}
  */
-export function warning(message) {
+export function warning(message: string) {
 	/* eslint-disable no-console */
 	if (typeof console !== 'undefined' && typeof console.error === 'function') {
 		console.error(message);
@@ -25,7 +26,7 @@ export function warning(message) {
 	/* eslint-enable no-empty */
 }
 
-export function shallowEqual(objA, objB) {
+export function shallowEqual(objA: IObject, objB: IObject) {
 	if (objA === objB) {
 		return true;
 	}
@@ -48,6 +49,6 @@ export function shallowEqual(objA, objB) {
 	return true;
 }
 
-export function wrapActionCreators(actionCreators) {
-	return (dispatch) => bindActionCreators(actionCreators, dispatch);
+export function wrapActionCreators(actionCreators: any) {
+	return (dispatch: Function) => bindActionCreators(actionCreators, dispatch);
 }

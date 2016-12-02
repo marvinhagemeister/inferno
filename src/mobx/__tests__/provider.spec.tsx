@@ -7,6 +7,8 @@ import Component from '../../component/es2015';
 import * as Inferno from '../../testUtils/inferno';
 Inferno; // suppress ts 'never used' error
 
+/* tslint:disable max-classes-per-file */
+
 describe('MobX Provider', () => {
 	let container;
 

@@ -157,9 +157,9 @@ function applyState(component: Component<any, any>, force, callback): void {
 	}
 }
 
-export default class Component<P, S> implements ComponentLifecycle<P, S> {
+export default class Component<P, S> {
 	static defaultProps: any;
-	state: S = {} as S;
+	public state: S = {} as S;
 	refs: any = {};
 	props: P & {children?: any};
 	context: any;

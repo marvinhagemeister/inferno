@@ -22,12 +22,12 @@ describe('Utils - innerHTML', () => {
 
 describe('Utils - createStyler', () => {
 	it('should return undefined if undefined', () => {
-		const CSS = undefined;
+		const CSS: any = undefined;
 		expect(createStyler(CSS)).to.equal(CSS);
 	});
 
 	it('should return CSS if null', () => {
-		const CSS = null;
+		const CSS: any = null;
 		expect(createStyler(CSS)).to.equal(CSS);
 	});
 
@@ -67,10 +67,10 @@ describe('Utils - style', () => {
 
 describe('Utils - triggerEvent', () => {
 	const element = {
-		dispatchEvent(event) {},
-	};
+		dispatchEvent(event: Event) {},
+	} as Element;
 	const spyDispatch = spy(element, 'dispatchEvent');
-	let spyCreateMouseEvent;
+	let spyCreateMouseEvent: sinon.SinonStub;
 
 	afterEach(() => {
 		spyDispatch.reset();
@@ -81,35 +81,34 @@ describe('Utils - triggerEvent', () => {
 		const triggerName = 'click';
 		const triggeredEventType = 'MouseEvents';
 		const event = {
-			initEvent: (eventType, canBubble, cancelable) => {
+			initEvent: (eventType: string, canBubble: boolean, cancelable: boolean) => {
 				expect(eventType).to.equal(triggerName);
 				expect(canBubble).to.be.true;
 				expect(cancelable).to.be.true;
 			}
 		};
-		spyCreateMouseEvent = stub(document, 'createEvent', (eventInterface) => {
+		spyCreateMouseEvent = stub(document, 'createEvent', (eventInterface: string) => {
 			expect(eventInterface).to.equal(triggeredEventType);
 
 			return event;
 		});
 
 		triggerEvent(triggerName, element);
-
+		
 		expect(spyDispatch.args[0][0]).to.equal(event);
-		expect(spyDispatch.args[0][1]).to.be.true;
 	});
 
 	it('should trigger event on dblclick', () => {
 		const triggerName = 'dblclick';
 		const triggeredEventType = 'MouseEvents';
 		const event = {
-			initEvent: (eventType, canBubble, cancelable) => {
+			initEvent: (eventType: string, canBubble: boolean, cancelable: boolean) => {
 				expect(eventType).to.equal(triggerName);
 				expect(canBubble).to.be.true;
 				expect(cancelable).to.be.true;
 			}
 		};
-		spyCreateMouseEvent = stub(document, 'createEvent', (eventInterface) => {
+		spyCreateMouseEvent = stub(document, 'createEvent', (eventInterface: string) => {
 			expect(eventInterface).to.equal(triggeredEventType);
 
 			return event;
@@ -118,20 +117,19 @@ describe('Utils - triggerEvent', () => {
 		triggerEvent(triggerName, element);
 
 		expect(spyDispatch.args[0][0]).to.equal(event);
-		expect(spyDispatch.args[0][1]).to.be.true;
 	});
 
 	it('should trigger event on mousedown', () => {
 		const triggerName = 'mousedown';
 		const triggeredEventType = 'MouseEvents';
 		const event = {
-			initEvent: (eventType, canBubble, cancelable) => {
+			initEvent: (eventType: string, canBubble: boolean, cancelable: boolean) => {
 				expect(eventType).to.equal(triggerName);
 				expect(canBubble).to.be.true;
 				expect(cancelable).to.be.true;
 			}
 		};
-		spyCreateMouseEvent = stub(document, 'createEvent', (eventInterface) => {
+		spyCreateMouseEvent = stub(document, 'createEvent', (eventInterface: string) => {
 			expect(eventInterface).to.equal(triggeredEventType);
 
 			return event;
@@ -140,20 +138,19 @@ describe('Utils - triggerEvent', () => {
 		triggerEvent(triggerName, element);
 
 		expect(spyDispatch.args[0][0]).to.equal(event);
-		expect(spyDispatch.args[0][1]).to.be.true;
 	});
 
 	it('should trigger event on mouseup', () => {
 		const triggerName = 'mouseup';
 		const triggeredEventType = 'MouseEvents';
 		const event = {
-			initEvent: (eventType, canBubble, cancelable) => {
+			initEvent: (eventType: string, canBubble: boolean, cancelable: boolean) => {
 				expect(eventType).to.equal(triggerName);
 				expect(canBubble).to.be.true;
 				expect(cancelable).to.be.true;
 			}
 		};
-		spyCreateMouseEvent = stub(document, 'createEvent', (eventInterface) => {
+		spyCreateMouseEvent = stub(document, 'createEvent', (eventInterface: string) => {
 			expect(eventInterface).to.equal(triggeredEventType);
 
 			return event;
@@ -162,20 +159,19 @@ describe('Utils - triggerEvent', () => {
 		triggerEvent(triggerName, element);
 
 		expect(spyDispatch.args[0][0]).to.equal(event);
-		expect(spyDispatch.args[0][1]).to.be.true;
 	});
 
 	it('should trigger event on focus', () => {
 		const triggerName = 'focus';
 		const triggeredEventType = 'HTMLEvents';
 		const event = {
-			initEvent: (eventType, canBubble, cancelable) => {
+			initEvent: (eventType: string, canBubble: boolean, cancelable: boolean) => {
 				expect(eventType).to.equal(triggerName);
 				expect(canBubble).to.be.true;
 				expect(cancelable).to.be.true;
 			}
 		};
-		spyCreateMouseEvent = stub(document, 'createEvent', (eventInterface) => {
+		spyCreateMouseEvent = stub(document, 'createEvent', (eventInterface: string) => {
 			expect(eventInterface).to.equal(triggeredEventType);
 
 			return event;
@@ -184,20 +180,19 @@ describe('Utils - triggerEvent', () => {
 		triggerEvent(triggerName, element);
 
 		expect(spyDispatch.args[0][0]).to.equal(event);
-		expect(spyDispatch.args[0][1]).to.be.true;
 	});
 
 	it('should trigger event on change', () => {
 		const triggerName = 'change';
 		const triggeredEventType = 'HTMLEvents';
 		const event = {
-			initEvent: (eventType, canBubble, cancelable) => {
+			initEvent: (eventType: string, canBubble: boolean, cancelable: boolean) => {
 				expect(eventType).to.equal(triggerName);
 				expect(canBubble).to.be.false;
 				expect(cancelable).to.be.true;
 			}
 		};
-		spyCreateMouseEvent = stub(document, 'createEvent', (eventInterface) => {
+		spyCreateMouseEvent = stub(document, 'createEvent', (eventInterface: string) => {
 			expect(eventInterface).to.equal(triggeredEventType);
 
 			return event;
@@ -206,20 +201,19 @@ describe('Utils - triggerEvent', () => {
 		triggerEvent(triggerName, element);
 
 		expect(spyDispatch.args[0][0]).to.equal(event);
-		expect(spyDispatch.args[0][1]).to.be.true;
 	});
 
 	it('should trigger event on blur', () => {
 		const triggerName = 'blur';
 		const triggeredEventType = 'HTMLEvents';
 		const event = {
-			initEvent: (eventType, canBubble, cancelable) => {
+			initEvent: (eventType: string, canBubble: boolean, cancelable: boolean) => {
 				expect(eventType).to.equal(triggerName);
 				expect(canBubble).to.be.true;
 				expect(cancelable).to.be.true;
 			}
 		};
-		spyCreateMouseEvent = stub(document, 'createEvent', (eventInterface) => {
+		spyCreateMouseEvent = stub(document, 'createEvent', (eventInterface: string) => {
 			expect(eventInterface).to.equal(triggeredEventType);
 
 			return event;
@@ -228,20 +222,19 @@ describe('Utils - triggerEvent', () => {
 		triggerEvent(triggerName, element);
 
 		expect(spyDispatch.args[0][0]).to.equal(event);
-		expect(spyDispatch.args[0][1]).to.be.true;
 	});
 
 	it('should trigger event on select', () => {
 		const triggerName = 'select';
 		const triggeredEventType = 'HTMLEvents';
 		const event = {
-			initEvent: (eventType, canBubble, cancelable) => {
+			initEvent: (eventType: string, canBubble: boolean, cancelable: boolean) => {
 				expect(eventType).to.equal(triggerName);
 				expect(canBubble).to.be.true;
 				expect(cancelable).to.be.true;
 			}
 		};
-		spyCreateMouseEvent = stub(document, 'createEvent', (eventInterface) => {
+		spyCreateMouseEvent = stub(document, 'createEvent', (eventInterface: string) => {
 			expect(eventInterface).to.equal(triggeredEventType);
 
 			return event;
@@ -250,7 +243,6 @@ describe('Utils - triggerEvent', () => {
 		triggerEvent(triggerName, element);
 
 		expect(spyDispatch.args[0][0]).to.equal(event);
-		expect(spyDispatch.args[0][1]).to.be.true;
 	});
 
 	it('should throw an error on unknown event', () => {
